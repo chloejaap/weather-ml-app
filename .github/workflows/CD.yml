@@ -1,0 +1,58 @@
+name: Weather ML App CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["Weather ML App CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+
+    # Only deploy if CI succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+# Download Repository
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+# Kubernetes Authentication
+
+      - name: Configure Kubernetes Access
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        run: |
+          mkdir -p ~/.kube
+          echo "$KUBE_CONFIG_DATA" | base64 -d > ~/.kube/config
+
+# Verify K8 Files Exist
+
+      - name: Verify Kubernetes Files
+        run: |
+          ls -la k8s
+
+# DEPLOY APPLICATION
+
+      - name: Deploy Application
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+
+# DEPLOYMENT VALIDATION
+
+      - name: Check Deployment Status
+        run: |
+          kubectl get deployments
+          kubectl get services
+          kubectl get pods
+          
+# ROLLOUT CHECK
+
+      - name: Verify Rollout
+        run: |
+          kubectl rollout status deployment/weather-ml-app
