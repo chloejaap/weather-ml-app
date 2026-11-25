@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
       # Install project packages
       - name: Install Flask and Dependencies
@@ -37,17 +37,17 @@ jobs:
       # Smoke Test
       - name: Run Smoke Tests
         run: |
-          python tests/smoke_test.py
+          python -m unittest tests/smoke_test.py
 
       # Unit Test
       - name: Run Unit Tests
         run: |
-          python tests/unit_test.py
+          python -m unittest tests/unit_test.py
 
       # Integration Test
       - name: Run Integration Tests
         run: |
-          python tests/integration_test.py
+          python -m unittest tests/integration_test.py
 
 
 # DOCKER
