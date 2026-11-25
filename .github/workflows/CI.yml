@@ -79,4 +79,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app-grp-4:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/weather-ml-app:latest
