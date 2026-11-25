@@ -67,6 +67,12 @@ jobs:
           push: false
           tags: dbunte300/weather-ml-app:v1
 
+      # Container Launch Test
+      - name: Test Docker Container Launch
+        run: |
+          docker run -d --name weather-test dbunte300/weather-ml-app:v1
+          docker exec weather-test python --version
+
       # Push Docker Image
       - name: Push Docker Image
         uses: docker/build-push-action@v6
