@@ -21,6 +21,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+# Setup Kubectl
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+
 # Kubernetes Authentication
 
       - name: Configure Kubernetes Access
